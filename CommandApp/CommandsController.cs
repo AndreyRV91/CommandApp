@@ -4,10 +4,12 @@ using AutoMapper;
 using CommandApp.Data;
 using CommandApp.Dtos;
 using CommandApp.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommandApp
 {
+    [EnableCors("MyPolicy")]
     [Route("api/commands")]
     [ApiController]
     public class CommandsController : ControllerBase
@@ -46,7 +48,7 @@ namespace CommandApp
 
         //POST api/commands/
         [HttpPost]
-        public ActionResult<CommandReadDto> CreateCommand(CommandCreateDto commandCreateDto)
+        public ActionResult<CommandReadDto> CreateCommand([FromForm] CommandCreateDto commandCreateDto)
         {
             var commandModel = _mapper.Map<Command>(commandCreateDto);
 
@@ -61,7 +63,7 @@ namespace CommandApp
 
         //PUT api/commands/{id}
         [HttpPut("{id}")]
-        public ActionResult UpdateCommand(int id, CommandUpdateDto commandUpdateDto)
+        public ActionResult UpdateCommand(int id, [FromForm] CommandUpdateDto commandUpdateDto)
         {
             var commandFromRepo = _repository.GetCommandById(id);
 

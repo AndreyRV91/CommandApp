@@ -28,6 +28,17 @@ namespace CommandApp
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "MyPolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("http://localhost:3000")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader();
+                    });
+            });
+
             //services.AddScoped<ICommandRepo, MockCommandRepo>(); 
             services.AddScoped<ICommandRepo, SqlCommandRepo>(); 
         }
@@ -42,6 +53,8 @@ namespace CommandApp
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseAuthorization();
 
